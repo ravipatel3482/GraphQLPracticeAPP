@@ -1,0 +1,64 @@
+# Get the full list of bourbons
+query GetAllBourbons {
+  bourbons {
+    id
+    name
+  }
+}
+
+# Get a single bourbon by ID
+query GetSingleBourbon {
+  bourbon(id: "1") {
+    name
+    company
+    distributor
+  }
+}
+
+
+
+# Get Full List With Single with Id 
+
+{
+  bourbons{
+    id
+    name
+    company
+    distributor
+    __typename
+  },
+  bourbon(id:1){
+    id
+    name
+    company
+    distributor
+  }
+} 
+
+
+# Add bourbon
+mutation {
+  addBourbon(id: "4", name: "Eagle Rare", company: "Buffalo Trace", distributor: "Sazerac") {
+    id
+    name
+  }
+}
+
+
+# Update bourbon
+mutation {
+  updateBourbon(id: "4", name: "Eagle Rare 10 Year", distributor:'southern Glazo') {
+    name
+    company
+    distributor
+  }
+}
+
+# To Delete bourbon
+mutation {
+  deleteBourbon(id: "1") {
+    id
+    name
+    company
+  }
+}

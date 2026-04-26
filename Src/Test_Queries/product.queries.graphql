@@ -1,0 +1,189 @@
+# Get the full list of product
+query GetAllInventory {
+  allProducts {
+    id
+    name
+    type
+    distributor
+  }
+}
+query GetAllInventory {
+  allProducts {
+    id
+    name
+    distributor
+    department {
+      id
+      name
+      categories {
+        id
+        subCategories {
+          id
+          name
+        }
+        name
+      }
+    }
+  }
+}
+# GetInventoryHealth
+query GetInventoryHealth {
+  allProducts {
+    name
+    stocks
+    purchase_cost
+    selling_cost
+    markup   # Calculated automatically: e.g. "25.00%"
+    margin   # Calculated automatically: e.g. "20.00%"
+  }
+}
+# Get allDiscontinuedProducts
+query GetArchiveList {
+  allDiscontinuedProducts {
+    id
+    name
+    company
+    distributor
+    stocks
+    isDiscontinued
+  }
+}
+# Get department
+query TestDepartmentGateway {
+  getDepartmentData(name: LIQUOR) {
+    name
+  }
+}
+query TestDepartmentGateway {
+  getDepartmentData(name: LIQUOR) {
+    id
+    name
+    categories {
+      id
+      name
+      subCategories{
+        id
+        name
+      }
+    }
+  }
+}
+# Get All department By categories wise
+query FetchStoreStructure {
+  getAllDepartmentsByCategories {
+    name
+    categories {
+      name
+      subCategories {
+        name
+        # You can even drill down to products here if your SubCategoryType allows it
+      }
+    }
+  }
+}
+query FetchStoreStructure {
+  getAllDepartmentFromEnum {
+    name
+    categories {
+      name
+      subCategories {
+        name
+        # You can even drill down to products here if your SubCategoryType allows it
+      }
+    }
+  }
+}
+# Get productByDepartment
+query GetLiquorStock {
+  getProductByDepartment(depname: LIQUOR) {
+    name
+    stocks
+    purchase_cost
+    subCategory {
+      name
+      category {
+        name
+      }
+    }
+  }
+}
+# productByName query
+query GetDistributorInfo {
+  productByName(name: "Pappy") {
+    name
+    company
+    distributor  # This is your Enum (RNDC, SGPROOF, etc.)
+  }
+}
+#find The distributor for Product
+query {
+  findDistributorForProduct(name: "Eagle Rare")
+}
+#find all the Prodcut for distributor
+query GetRNDCProducts {
+  findProductsByDistributor(distributor: RNDC) {
+    name
+    stocks
+    purchase_cost
+    selling_cost
+    distributor
+  }
+}
+# add Product 
+mutation CreateNewProduct {
+  addProduct(
+    name: "New Store Item",
+    company: "Standard Brands",
+    distributor: RNDC,
+    subCatId: "101",
+    purchase_cost: 15.50,
+    selling_cost: 29.99,
+    initialStock: 45
+  ) {
+    id
+    name
+    stocks 
+    markup
+    margin
+  }
+}
+# To Update Product Query 
+#Name Change 
+mutation UpdateBasicInfo {
+  updateProduct(
+    id: "1",
+    name: "Premium Selection 10yr",
+    selling_cost: 55.00
+  ) {
+    name
+    selling_cost
+    stocks  # This stays the same
+  }
+}
+#Update Stock
+mutation FixStockLevel {
+  updateProduct(
+    id: "1",
+    newQuantity: 35
+  ) {
+    name
+    stocks  # This will now return 35
+  }
+}
+#Update Status
+mutation DiscontinueOldItem {
+  updateProduct(id: "1", isDiscontinued: true) {
+    name
+    isDiscontinued
+  }
+}
+# To Delete  Product Query 
+mutation {
+  deleteProduct(id: "2") {
+    id
+    name
+  }
+}
+
+
+
